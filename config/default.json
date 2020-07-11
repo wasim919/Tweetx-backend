@@ -1,0 +1,5 @@
+{
+  "mongoURI": "mongodb://localhost:27017/devcamper",
+  "GEOCODER_PROVIDER": "mapquest",
+  "GEOCODER_API_KEY": "6V2dmlYvvljQmOG3uPMTdxyzZaWN0MSK"
+}
