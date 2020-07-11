@@ -35,10 +35,6 @@ const UserSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'User',
   },
-  posts: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Post',
-  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   createdAt: {
