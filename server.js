@@ -24,8 +24,7 @@ connectDB();
 
 // Route files
 const auth = require('./routes/auth');
-const bids = require('./routes/bids');
-const auctionitems = require('./routes/auctionitems');
+const posts = require('./routes/posts');
 const users = require('./routes/user');
 
 const app = express();
@@ -70,8 +69,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mount routers
-app.use('/api/v1/auctionitems', auctionitems);
-app.use('/api/v1/bids', bids);
+app.use('/api/v1/posts', posts);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
 

@@ -1,6 +1,6 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
-const AuctionItem = require('../models/AuctionItem');
+const Post = require('../models/Post');
 const User = require('../models/User');
 
 // @desc        Get all users
