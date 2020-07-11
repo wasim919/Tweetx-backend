@@ -57,32 +57,29 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc            Get AuctionItem corresponding to a specific user
-// @route           Get /api/v1/users/auctionitems/:userId
+// @desc            Get Post corresponding to a specific user
+// @route           Get /api/v1/users/posts/:userId
 // @access          Private
-exports.getUserAuctionItem = asyncHandler(async (req, res, next) => {
+exports.getUserPost = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) {
     return new ErrorResponse(`User not found`, 400);
   }
-  console.log(req.user.id);
-  console.log(user._id.toString());
   if (req.user.id !== user._id.toString()) {
     return new ErrorResponse(
       `User with id: ${req.params.id} is not authorized to access this channel`,
       401
     );
   }
-  console.log('hello');
-  const auctionitems = await AuctionItem.find({ user: req.user.id });
-  if (!auctionitems) {
+  const posts = await Post.find({ user: req.user.id });
+  if (!posts) {
     return new ErrorResponse(
-      `User with id: ${req.params.id} has not created any auction item yet`,
+      `User with id: ${req.params.id} has not created any post yet`,
       404
     );
   }
   res.status(200).json({
     success: true,
-    data: auctionitems,
+    data: posts,
   });
 });

@@ -7,6 +7,8 @@ const {
   updateDetails,
   updatePassword,
   logout,
+  getFollowers,
+  getFollowing,
 } = require('../controllers/auth');
 const express = require('express');
 const { protect } = require('../middleware/auth');
@@ -15,6 +17,8 @@ const router = express.Router();
 
 router.route('/register').post(register);
 router.route('/login').post(login);
+router.route('/getFollowers').get(protect, getFollowers);
+router.route('/getFollowing').post(protect, getFollowing);
 router.route('/me').get(protect, getMe);
 router.route('/logout').get(protect, logout);
 router.route('/forgotPassword').post(forgotPassword);

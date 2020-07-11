@@ -54,6 +54,64 @@ exports.getMe = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Get followers
+// @route   GET /api/v1/auth/getFollowers
+// @access  Private
+exports.getFollowers = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return new ErrorResponse(`User not found`, 400);
+  }
+  if (req.user.id !== user._id.toString()) {
+    return new ErrorResponse(
+      `User with id: ${req.params.id} is not authorized to access this channel`,
+      401
+    );
+  }
+  const followers = user.followers;
+  if (followers.length === 0) {
+    return res.status(200).json({
+      success: true,
+      data: [],
+    });
+  }
+  return res.status(200).json({
+    success: true,
+    data: {
+      followers,
+    },
+  });
+});
+
+// @desc    Get following
+// @route   GET /api/v1/auth/getFollowing
+// @access  Private
+exports.getFollowing = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return new ErrorResponse(`User not found`, 400);
+  }
+  if (req.user.id !== user._id.toString()) {
+    return new ErrorResponse(
+      `User with id: ${req.params.id} is not authorized to access this channel`,
+      401
+    );
+  }
+  const following = user.following;
+  if (following.length === 0) {
+    return res.status(200).json({
+      success: true,
+      data: [],
+    });
+  }
+  return res.status(200).json({
+    success: true,
+    data: {
+      following,
+    },
+  });
+});
+
 // @desc    Logout
 // @route   GET /api/v1/auth/logout
 // @access  Private
