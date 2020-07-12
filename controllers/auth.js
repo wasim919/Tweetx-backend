@@ -8,14 +8,14 @@ const crypto = require('crypto');
 // @route       POST /api/v1/auth/register
 // access       Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { username, email, password, region } = req.body;
+  console.log('hello');
+  const { username, email, password } = req.body;
 
   // Create user
   const user = await User.create({
     username,
     email,
     password,
-    region,
   });
 
   sendTokenResponse(user, res, 201);

@@ -83,3 +83,28 @@ exports.getUserPost = asyncHandler(async (req, res, next) => {
     data: posts,
   });
 });
+
+// @desc            Follow user
+// @route           Get /api/v1/users/followUser/:userId
+// @access          Private
+exports.followUser = asyncHandler(async (req, res, next) => {
+  const userToBeFollowed = await User.findById(req.params.id);
+  const userFollowing = await User.findById(req.user.id);
+  if (!userToBeFollowed || !userFollowing) {
+    return new ErrorResponse(`User not found`, 400);
+  }
+  // if (req.user.id !== user._id.toString()) {
+  //   return new ErrorResponse(
+  //     `User with id: ${req.params.id} is not authorized to access this channel`,
+  //     401
+  //   );
+  // }
+  userToBeFollowed.followers.push(userFollowing);
+  userFollowing.following.push(userToBeFollowed);
+  await userToBeFollowed.save();
+  await userFollowing.save();
+
+  res.status(200).json({
+    success: true,
+  });
+});

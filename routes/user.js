@@ -6,6 +6,7 @@ const {
   updateUser,
   deleteUser,
   getUserPost,
+  followUser,
 } = require('../controllers/users');
 const User = require('../models/User');
 
@@ -14,8 +15,8 @@ const router = express.Router();
 const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
-router.use(protect);
-router.route('/posts/:id').get(getUserPost);
+router.route('/posts/:id').get(protect, getUserPost);
+router.route('/followUser/:id').get(protect, followUser);
 
 router.use(authorize('admin'));
 

@@ -69,8 +69,8 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mount routers
-app.use('/api/v1/posts', posts);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/posts', posts);
 app.use('/api/v1/users', users);
 
 app.use(errorHandler);
