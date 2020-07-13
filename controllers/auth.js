@@ -55,10 +55,10 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get followers
-// @route   GET /api/v1/auth/getFollowers
+// @route   GET /api/v1/auth/getFollowers/:id
 // @access  Private
 exports.getFollowers = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.params.id).populate('connections');
   if (!user) {
     return new ErrorResponse(`User not found`, 400);
   }
@@ -69,6 +69,7 @@ exports.getFollowers = asyncHandler(async (req, res, next) => {
     );
   }
   const followers = user.followers;
+  console.log(followers);
   if (followers.length === 0) {
     return res.status(200).json({
       success: true,
@@ -84,10 +85,11 @@ exports.getFollowers = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get following
-// @route   GET /api/v1/auth/getFollowing
+// @route   GET /api/v1/auth/getFollowing/:id
 // @access  Private
 exports.getFollowing = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
+  console.log('hello');
+  const user = await User.findById(req.params.id).populate('connections');
   if (!user) {
     return new ErrorResponse(`User not found`, 400);
   }

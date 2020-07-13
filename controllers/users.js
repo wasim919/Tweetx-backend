@@ -99,11 +99,54 @@ exports.followUser = asyncHandler(async (req, res, next) => {
   //     401
   //   );
   // }
-  userToBeFollowed.followers.push(userFollowing);
-  userFollowing.following.push(userToBeFollowed);
+  userToBeFollowed.followers.push({
+    id: userFollowing._id,
+    username: userFollowing.username,
+    email: userFollowing.email,
+  });
+  userFollowing.following.push({
+    id: userToBeFollowed._id,
+    username: userToBeFollowed.username,
+    email: userToBeFollowed.email,
+  });
   await userToBeFollowed.save();
   await userFollowing.save();
 
+  res.status(200).json({
+    success: true,
+  });
+});
+
+// @desc            Unfollow user
+// @route           Get /api/v1/users/followUser/:userId
+// @access          Private
+exports.unFollowUser = asyncHandler(async (req, res, next) => {
+  const userToBeUnFollowed = await User.findById(req.params.id);
+  const userFollowing = await User.findById(req.user.id);
+  if (!userToBeFollowed || !userFollowing) {
+    return new ErrorResponse(`User not found`, 400);
+  }
+  // if (req.user.id !== user._id.toString()) {
+  //   return new ErrorResponse(
+  //     `User with id: ${req.params.id} is not authorized to access this channel`,
+  //     401
+  //   );
+  // }
+  let i;
+  for (i = 0; i < userToBeUnFollowed.followers.length; ++i) {
+    if (userToBeUnFollowed.followers[i]._id === req.user.id) {
+      break;
+    }
+  }
+  userToBeUnFollowed.followers.splice(i);
+  await userToBeFollowed.save();
+  for (i = 0; i < userFollowing.following.length; ++i) {
+    if (userFollowing.following[i]._id === req.params.id) {
+      break;
+    }
+  }
+  userFollowing.following.splice(i);
+  await userFollowing.save();
   res.status(200).json({
     success: true,
   });

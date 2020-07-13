@@ -28,12 +28,22 @@ const UserSchema = new mongoose.Schema({
     select: false,
   },
   followers: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'User',
+    type: [
+      {
+        id: String,
+        username: String,
+        email: String,
+      },
+    ],
   },
   following: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'User',
+    type: [
+      {
+        id: String,
+        username: String,
+        email: String,
+      },
+    ],
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
