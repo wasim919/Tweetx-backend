@@ -69,7 +69,6 @@ exports.getFollowers = asyncHandler(async (req, res, next) => {
     );
   }
   const followers = user.followers;
-  console.log(followers);
   if (followers.length === 0) {
     return res.status(200).json({
       success: true,
@@ -91,12 +90,14 @@ exports.getFollowing = asyncHandler(async (req, res, next) => {
   console.log('hello');
   const user = await User.findById(req.params.id).populate('connections');
   if (!user) {
-    return new ErrorResponse(`User not found`, 400);
+    return next(new ErrorResponse(`User not found`, 400));
   }
   if (req.user.id !== user._id.toString()) {
-    return new ErrorResponse(
-      `User with id: ${req.params.id} is not authorized to access this channel`,
-      401
+    return next(
+      new ErrorResponse(
+        `User with id: ${req.params.id} is not authorized to access this channel`,
+        401
+      )
     );
   }
   const following = user.following;

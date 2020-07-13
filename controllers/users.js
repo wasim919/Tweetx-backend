@@ -88,10 +88,21 @@ exports.getUserPost = asyncHandler(async (req, res, next) => {
 // @route           Get /api/v1/users/followUser/:userId
 // @access          Private
 exports.followUser = asyncHandler(async (req, res, next) => {
+  if (req.params.id === req.user.id) {
+    return new ErrorResponse(`You can't follow yourself`, 400);
+  }
   const userToBeFollowed = await User.findById(req.params.id);
   const userFollowing = await User.findById(req.user.id);
   if (!userToBeFollowed || !userFollowing) {
-    return new ErrorResponse(`User not found`, 400);
+    return next(new ErrorResponse(`User not found`, 400));
+  }
+  for (let i = 0; i < userFollowing.following.length; ++i) {
+    if (userFollowing.following[i].id === req.params.id) {
+      console.log('hello');
+      return next(
+        new ErrorResponse(`You have already followed this user`, 400)
+      );
+    }
   }
   // if (req.user.id !== user._id.toString()) {
   //   return new ErrorResponse(
@@ -124,7 +135,7 @@ exports.unFollowUser = asyncHandler(async (req, res, next) => {
   const userToBeUnFollowed = await User.findById(req.params.id);
   const userFollowing = await User.findById(req.user.id);
   if (!userToBeFollowed || !userFollowing) {
-    return new ErrorResponse(`User not found`, 400);
+    return next(new ErrorResponse(`User not found`, 400));
   }
   // if (req.user.id !== user._id.toString()) {
   //   return new ErrorResponse(
