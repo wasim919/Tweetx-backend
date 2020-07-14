@@ -4,7 +4,7 @@
 
 ## Usage
 
-First clone the frontend needed for this restapi.
+First clone the frontend needed for this restapi from: https://github.com/wasim919/Tweetx-Frontend
 
 Rename "config/config.env.env" to "config/config.env" and update the values/settings to your own
 
