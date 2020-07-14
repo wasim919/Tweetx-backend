@@ -17,7 +17,7 @@ const advancedResults = require('../middleware/advancedResults');
 
 router
   .route('/')
-  .get(advancedResults(Post), getPosts)
+  .get(protect, advancedResults(Post), getPosts)
   .post(protect, createPost);
 
 router
