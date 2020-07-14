@@ -10,7 +10,12 @@ const crypto = require('crypto');
 exports.register = asyncHandler(async (req, res, next) => {
   console.log('hello');
   const { username, email, password } = req.body;
-
+  const users = await User.find();
+  for (let i = 0; i < users.length; ++i) {
+    if (users[i].email === email) {
+      return next(new ErrorResponse(`User already registered`, 400));
+    }
+  }
   // Create user
   const user = await User.create({
     username,
@@ -55,19 +60,14 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get followers
-// @route   GET /api/v1/auth/getFollowers/:id
+// @route   GET /api/v1/auth/getFollowers
 // @access  Private
 exports.getFollowers = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.id).populate('connections');
+  const user = await User.findById(req.user.id);
   if (!user) {
     return new ErrorResponse(`User not found`, 400);
   }
-  if (req.user.id !== user._id.toString()) {
-    return new ErrorResponse(
-      `User with id: ${req.params.id} is not authorized to access this channel`,
-      401
-    );
-  }
+
   const followers = user.followers;
   if (followers.length === 0) {
     return res.status(200).json({
@@ -84,21 +84,12 @@ exports.getFollowers = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get following
-// @route   GET /api/v1/auth/getFollowing/:id
+// @route   GET /api/v1/auth/getFollowing
 // @access  Private
 exports.getFollowing = asyncHandler(async (req, res, next) => {
-  console.log('hello');
-  const user = await User.findById(req.params.id).populate('connections');
+  const user = await User.findById(req.user.id);
   if (!user) {
     return next(new ErrorResponse(`User not found`, 400));
-  }
-  if (req.user.id !== user._id.toString()) {
-    return next(
-      new ErrorResponse(
-        `User with id: ${req.params.id} is not authorized to access this channel`,
-        401
-      )
-    );
   }
   const following = user.following;
   if (following.length === 0) {

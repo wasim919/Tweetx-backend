@@ -98,10 +98,14 @@ exports.followUser = asyncHandler(async (req, res, next) => {
   }
   for (let i = 0; i < userFollowing.following.length; ++i) {
     if (userFollowing.following[i].id === req.params.id) {
-      console.log('hello');
       return next(
         new ErrorResponse(`You have already followed this user`, 400)
       );
+    }
+  }
+  for (let i = 0; i < userFollowing.following.length; ++i) {
+    if (userFollowing.following[i].id === req.user.id) {
+      return next(new ErrorResponse(`You can't follow yourself`, 400));
     }
   }
   // if (req.user.id !== user._id.toString()) {
@@ -129,9 +133,9 @@ exports.followUser = asyncHandler(async (req, res, next) => {
 });
 
 // @desc            Unfollow user
-// @route           Get /api/v1/users/followUser/:userId
+// @route           Get /api/v1/users/removeFollower/:userId
 // @access          Private
-exports.unFollowUser = asyncHandler(async (req, res, next) => {
+exports.removeFollower = asyncHandler(async (req, res, next) => {
   const userToBeUnFollowed = await User.findById(req.params.id);
   const userFollowing = await User.findById(req.user.id);
   if (!userToBeFollowed || !userFollowing) {
@@ -145,19 +149,67 @@ exports.unFollowUser = asyncHandler(async (req, res, next) => {
   // }
   let i;
   for (i = 0; i < userToBeUnFollowed.followers.length; ++i) {
-    if (userToBeUnFollowed.followers[i]._id === req.user.id) {
+    if (userToBeUnFollowed.followers[i].id === req.user.id) {
       break;
     }
   }
-  userToBeUnFollowed.followers.splice(i);
+  userToBeUnFollowed.followers.splice(i, 1);
   await userToBeFollowed.save();
   for (i = 0; i < userFollowing.following.length; ++i) {
-    if (userFollowing.following[i]._id === req.params.id) {
+    if (userFollowing.following[i].id === req.params.id) {
       break;
     }
   }
-  userFollowing.following.splice(i);
+  userFollowing.following.splice(i, 1);
   await userFollowing.save();
+  res.status(200).json({
+    success: true,
+  });
+});
+
+// @desc            remove following
+// @route           Get /api/v1/users/removeFollowing/:userId
+// @access          Private
+exports.removeFollowing = asyncHandler(async (req, res, next) => {
+  const userBeingFollowed = await User.findById(req.params.id);
+  const userFollowing = await User.findById(req.user.id);
+  console.log(userBeingFollowed);
+  console.log(userFollowing);
+  if (!userFollowing || !userBeingFollowed) {
+    return next(new ErrorResponse(`User not found`, 400));
+  }
+  // if (req.user.id !== user._id.toString()) {
+  //   return new ErrorResponse(
+  //     `User with id: ${req.params.id} is not authorized to access this channel`,
+  //     401
+  //   );
+  // }
+  let i;
+  console.log('userFollowing');
+  console.log(userFollowing);
+  for (i = 0; i < userFollowing.following.length; ++i) {
+    if (userFollowing.following[i].id === req.params.id) {
+      console.log(i);
+      break;
+    }
+  }
+  console.log('jkdsfjl');
+  console.log(i);
+  console.log(userFollowing.following);
+  userFollowing.following.splice(i, 1);
+  await userFollowing.save();
+  for (i = 0; i < userBeingFollowed.followers.length; ++i) {
+    if (userBeingFollowed.followers[i].id === req.user.id) {
+      break;
+    }
+  }
+  // console.log('userbeingfollowed');
+  // console.log(userBeingFollowed);
+  // console.log('jkdsfjl');
+  // console.log(i);
+  // console.log(userBeingFollowed.followers);
+  userBeingFollowed.followers.splice(i, 1);
+  await userBeingFollowed.save();
   res.status(200).json({
     success: true,
   });

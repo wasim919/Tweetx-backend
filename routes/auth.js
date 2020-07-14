@@ -17,8 +17,8 @@ const router = express.Router();
 
 router.route('/register').post(register);
 router.route('/login').post(login);
-router.route('/getFollowers/:id').get(protect, getFollowers);
-router.route('/getFollowing/:id').get(protect, getFollowing);
+router.route('/getFollowers').get(protect, getFollowers);
+router.route('/getFollowing').get(protect, getFollowing);
 router.route('/me').get(protect, getMe);
 router.route('/logout').get(protect, logout);
 router.route('/forgotPassword').post(forgotPassword);
