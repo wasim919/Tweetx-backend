@@ -22,9 +22,4 @@ npm install
 
 - npm start
 
-## Documentation
-
-> The index page of the api contains the documentation of the API
-> You can also check our the documentation at: [Postman Docs](https://documenter.getpostman.com/view/10666268/SzzhcxrA?version=latest)
-
-- Version 1.0.0
+* Version 1.0.0
