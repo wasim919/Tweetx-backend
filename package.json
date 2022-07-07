@@ -27,7 +27,7 @@
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
     "minimist": "^1.2.5",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mongoose": "^5.9.3",
     "morgan": "^1.10.0",
     "node-geocoder": "^3.27.0",
