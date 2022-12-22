@@ -25,7 +25,7 @@
     "gravatar": "^1.8.0",
     "helmet": "^3.22.0",
     "hpp": "^0.2.3",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "minimist": "^1.2.5",
     "moment": "^2.24.0",
     "mongoose": "^5.9.3",
